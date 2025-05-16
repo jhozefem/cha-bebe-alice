@@ -1,0 +1,15 @@
+{
+    "name": "cha-bebe-alice",
+    "version": "1.0.0",
+    "description": "Confirmação de presença para o chá de bebê da Alice",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "author": "Jhozefem Pontes",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.18.2",
+      "google-spreadsheet": "^3.3.0"
+    }
+  }
