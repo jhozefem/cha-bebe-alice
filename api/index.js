@@ -1,14 +1,13 @@
 const express = require('express');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const creds = require('./credentials.json');
+const creds = require('../credentials.json');
 const path = require('path');
 
 const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-const SHEET_ID = 'SEU_ID_DO_GOOGLE_SHEET'; // Substitua pelo ID da planilha
-const doc = new GoogleSpreadsheet(SHEET_ID);
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
 let sheet;
 
 (async () => {
