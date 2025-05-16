@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmação de Presença - Arraiá da Alice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff3e0;
+      text-align: center;
+      padding: 2rem;
+      color: #4e342e;
+    }
+    h1 {
+      color: #d84315;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin-top: 1rem;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Arraiá da Alice</h1>
+  <div id="question" class="hidden">
+    <p>Você vai conseguir comparecer ao chá de bebê?</p>
+    <button onclick="submitAnswer('Sim')">Sim</button>
+    <button onclick="submitAnswer('Não')">Não</button>
+  </div>
+  <div id="message"></div>
+
+  <script>
+    let currentPhone = window.location.search.replace('?phone=', '');
+
+    async function checkPhone() {
+      const res = await fetch(`/api/check/${currentPhone}`);
+      const data = await res.json();
+      if (data.status === 'not_found') {
+        document.getElementById('message').innerText = 'Telefone não encontrado.';
+      } else if (data.status === 'already_answered') {
+        document.getElementById('message').innerText = 'Você já respondeu!';
+      } else {
+        document.getElementById('form').classList.add('hidden');
+        document.getElementById('question').classList.remove('hidden');
+      }
+    }
+
+    async function submitAnswer(answer) {
+      const res = await fetch('/api/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: currentPhone, answer })
+      });
+      const data = await res.json();
+      document.getElementById('question').classList.add('hidden');
+      document.getElementById('message').innerText = data.message;
+    }
+
+    checkPhone();
+  </script>
+</body>
+</html>
