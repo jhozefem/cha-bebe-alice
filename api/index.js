@@ -1,17 +1,21 @@
 const express = require('express');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const creds = require('../credentials.json');
-const path = require('path');
+import { JWT } from 'google-auth-library';
 
 const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
+const serviceAccountAuth = new JWT({
+  email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY,
+  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+});
+
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, serviceAccountAuth);
 let sheet;
 
 (async () => {
-  await doc.useServiceAccountAuth(creds);
   await doc.loadInfo();
   sheet = doc.sheetsByIndex[0];
 })();
