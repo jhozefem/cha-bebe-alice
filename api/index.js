@@ -20,7 +20,7 @@ app.get('/api/check/:phone', async (req, res) => {
   sheet = doc.sheetsByIndex[0];
 
   const phone = req.params.phone;
-  await sheet.loadCells();
+  await sheet.loadCells('A:G');
   const rows = await sheet.getRows();
   const row = rows.find(r => r._rawData[2] === phone);
 
@@ -34,6 +34,7 @@ app.post('/api/respond', async (req, res) => {
   sheet = doc.sheetsByIndex[0];
 
   const { phone, answer, qty } = req.body;
+  await sheet.loadCells('A:G');
   const rows = await sheet.getRows();
   const row = rows.find(r => r._rawData[2] === phone);
   let message = '';
