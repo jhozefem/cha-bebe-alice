@@ -1,7 +1,6 @@
 const express = require('express');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const { JWT } = require('google-auth-library');
-require('dotenv').config();
 
 const app = express();
 app.use(express.json());
