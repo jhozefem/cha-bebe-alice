@@ -12,12 +12,15 @@ const serviceAccountAuth = new JWT({
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
-await doc.loadInfo();
-
-let sheet = doc.sheetsByIndex[0];
+let sheet;
 
 app.get('/api/check/:phone', async (req, res) => {
+  if (!sheet) {
+    const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
+    await doc.loadInfo();
+    sheet = doc.sheetsByIndex[0];
+  }
+
   const phone = req.params.phone;
   await sheet.loadCells();
   const rows = await sheet.getRows();
@@ -29,6 +32,12 @@ app.get('/api/check/:phone', async (req, res) => {
 });
 
 app.post('/api/respond', async (req, res) => {
+  if (!sheet) {
+    const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
+    await doc.loadInfo();
+    sheet = doc.sheetsByIndex[0];
+  }
+
   const { phone, answer } = req.body;
   const rows = await sheet.getRows();
   const row = rows.find(r => r.Telefone === phone);
