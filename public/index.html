@@ -5,26 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirmação de Presença - Arraiá da Alice</title>
   <style>
+    /* Mobile-first */
+    :root {
+      --bg-color: #0f3761;        /* azul escuro do fundo */
+      --text-primary: #f9dc5c;    /* amarelo claro do título */
+      --text-accent: #e86800;     /* laranja para subtítulo */
+      --button-bg: #e86800;       /* mesmo laranja */
+      --button-text: #ffffff;
+      --font-sans: 'Poppins', sans-serif;
+    }
+  
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+  
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff3e0;
+      margin: 0;
+      padding: 1rem;
+      font-family: var(--font-sans);
+      background-color: var(--bg-color);
+      color: var(--text-primary);
       text-align: center;
-      padding: 2rem;
-      color: #4e342e;
     }
+
+    .hidden { display: none; }
+
+    .banner-top {
+      position: fixed;
+      top: 0;
+      left: -15px;
+      width: 150px;
+      height: 125px;
+      background: url('/images/banner-top.png') no-repeat center center / contain;
+      transform: rotate(320deg);
+      z-index: 1000;
+    }
+  
     h1 {
-      color: #d84315;
+      font-size: 1.5rem;
+      margin: 1.5rem 0 0.5rem;
+      color: var(--text-accent);
     }
-    input, button {
-      padding: 0.5rem;
+    h2 {
+      font-size: 2rem;
+      margin: 0.5rem 0 1.5rem;
+      color: var(--text-primary);
+    }
+  
+    #form input,
+    button {
+      width: 100%;
+      max-width: 280px;
+      font-size: 1rem;
+      padding: 0.75rem;
+      margin: 0.75rem auto;
+      border: none;
+      border-radius: 0.5rem;
+      outline: none;
+    }
+  
+    button {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover {
+      opacity: 0.8;
+    }
+  
+    #question p {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    #message {
+      font-size: 1rem;
       margin-top: 1rem;
     }
-    .hidden { display: none; }
+  
+    /* Aumenta fontes e espaçamentos em telas maiores */
+    @media (min-width: 600px) {
+      body {
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-top: 2rem;
+      }
+      h2 {
+        font-size: 3rem;
+      }
+      #form input,
+      button {
+        max-width: 360px;
+        font-size: 1.25rem;
+      }
+    }
+
+    /* Galeria de fotos (3 imagens lado a lado) */
+    .gallery {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .gallery img {
+      width: 40%;
+      max-width: 170px;
+      height: auto;
+      border-radius: 0.5rem;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
-  <h1>Arraiá da Alice</h1>
-  <div id="question" class="hidden">
+  <div class="banner-top"></div>
+  <h1 style="margin-top: 80px">Arraiá da Alice</h1>
+  <div class="gallery">
+    <img src="/images/photo1.jpeg" alt="Foto 1">
+    <img src="/images/photo3.jpeg" alt="Foto 3">
+  </div>
+  <div id="question" style="margin-top: 50px" class="">
     <p>Você vai conseguir comparecer ao chá de bebê?</p>
     <button onclick="submitAnswer('Sim')">Sim</button>
     <button onclick="submitAnswer('Não')">Não</button>
