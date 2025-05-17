@@ -49,8 +49,6 @@ app.post('/api/respond', async (req, res) => {
     message = 'Sem problemas, esperamos nos encontrar em outra ocasião. Se ainda assim quiser presentear a Alice, as instruções estão abaixo.';
   }
 
-  console.log(row);
-
   await row.save();
   return res.json({ message });
 });
