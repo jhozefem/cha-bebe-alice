@@ -48,7 +48,7 @@ app.post('/api/respond', async (req, res) => {
     row._rawData[3] = qty.children;
   }
   await row.save();
-  return res.json({ message: 'Obrigado pela confirmação! Mal podemos esperar para celebrar a chegada da Alice com você 🎉🎉' });
+  return res.json({ message: 'Obrigado pela confirmação! Mal podemos esperar para celebrar a chegada da Alice com você 🎉👶' });
 });
 
 const PORT = process.env.PORT || 3000;
