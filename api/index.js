@@ -12,11 +12,12 @@ const serviceAccountAuth = new JWT({
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID);
 let sheet;
 
 app.get('/api/check/:phone', async (req, res) => {
   if (!sheet) {
+    await doc.useAuthClient(serviceAccountAuth);
     await doc.loadInfo();
     sheet = doc.sheetsByIndex[0];
   }
@@ -33,6 +34,7 @@ app.get('/api/check/:phone', async (req, res) => {
 
 app.post('/api/respond', async (req, res) => {
   if (!sheet) {
+    await doc.useAuthClient(serviceAccountAuth);
     await doc.loadInfo();
     sheet = doc.sheetsByIndex[0];
   }
