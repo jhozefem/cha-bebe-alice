@@ -27,7 +27,7 @@ app.get('/api/check/:phone', async (req, res) => {
   const row = rows.find(r => r._rawData[0] === phone);
 
   if (!row) return res.json({ status: 'not_found' });
-  if (row.Resposta) return res.json({ status: 'already_answered' });
+  if (row._rawData[1]) return res.json({ status: 'already_answered' });
   return res.json({ status: 'ok' });
 });
 
@@ -40,9 +40,9 @@ app.post('/api/respond', async (req, res) => {
 
   const { phone, answer } = req.body;
   const rows = await sheet.getRows();
-  const row = rows.find(r => r.Telefone === phone);
+  const row = rows.find(r => r._rawData[0] === phone);
   if (!row) return res.json({ message: 'Erro: telefone não encontrado.' });
-  row.Resposta = answer;
+  row._rawData[1] = answer;
   await row.save();
   return res.json({ message: 'Resposta registrada com sucesso!' });
 });
