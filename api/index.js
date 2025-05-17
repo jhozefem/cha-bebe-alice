@@ -41,14 +41,21 @@ app.post('/api/respond', async (req, res) => {
   const { phone, answer, qty } = req.body;
   const rows = await sheet.getRows();
   const row = rows.find(r => r._rawData[0] === phone);
+  let message = '';
+
   if (!row) return res.json({ message: 'Parece que seu número não consta na lista de convidados 🤔🤔' });
   row._rawData[1] = answer;
-  if(answer === 'Sim') {
+
+  if (answer === 'Sim') {
     row._rawData[2] = qty.adults;
     row._rawData[3] = qty.children;
+    message = 'Obrigado pela confirmação! Mal podemos esperar para celebrar a chegada da Alice com você 🎉👶';
+  } else if (answer === 'Não') {
+    message = 'Sem problemas, esperamos nos encontrar em outra ocasião. Se ainda assim quiser presentear a Alice, as instruções estão abaixo.';
   }
+
   await row.save();
-  return res.json({ message: 'Obrigado pela confirmação! Mal podemos esperar para celebrar a chegada da Alice com você 🎉👶' });
+  return res.json({ message });
 });
 
 const PORT = process.env.PORT || 3000;
