@@ -41,10 +41,10 @@ app.post('/api/respond', async (req, res) => {
   const { phone, answer } = req.body;
   const rows = await sheet.getRows();
   const row = rows.find(r => r._rawData[0] === phone);
-  if (!row) return res.json({ message: 'Erro: telefone não encontrado.' });
+  if (!row) return res.json({ message: 'Parece que seu número não consta na lista de convidados. Por favor, fale com os papais para atualizarmos isso. 😀' });
   row._rawData[1] = answer;
   await row.save();
-  return res.json({ message: 'Resposta registrada com sucesso!' });
+  return res.json({ message: 'Muito obrigado pela confirmação! Estamos muito felizes e mal podemos esperar para celebrar a chegada da Alice com você! 🎉' });
 });
 
 const PORT = process.env.PORT || 3000;

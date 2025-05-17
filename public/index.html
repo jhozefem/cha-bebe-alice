@@ -28,6 +28,11 @@
       text-align: center;
     }
 
+    a {
+      color: var(--text-accent);
+      transition: color 0.2s;
+    }
+
     .hidden { display: none; }
 
     .banner-top {
@@ -42,7 +47,7 @@
     }
   
     h1 {
-      font-size: 1.5rem;
+      font-size: 2rem;
       margin: 1.5rem 0 0.5rem;
       color: var(--text-accent);
     }
@@ -52,9 +57,9 @@
       color: var(--text-primary);
     }
   
-    #form input,
+    input,
     button {
-      width: 100%;
+      width: 40%;
       max-width: 280px;
       font-size: 1rem;
       padding: 0.75rem;
@@ -62,6 +67,12 @@
       border: none;
       border-radius: 0.5rem;
       outline: none;
+      text-align: center;
+    }
+
+    #question2 button {
+      width: 50%;
+      max-width: 50%;
     }
   
     button {
@@ -74,7 +85,7 @@
       opacity: 0.8;
     }
   
-    #question p {
+    #question1 p, #question2 p {
       font-size: 1rem;
       margin-bottom: 0.5rem;
     }
@@ -90,16 +101,16 @@
         padding: 2rem;
       }
       h1 {
-        font-size: 2rem;
+        font-size: 3rem;
         margin-top: 2rem;
       }
       h2 {
         font-size: 3rem;
       }
-      #form input,
+      input,
       button {
         max-width: 360px;
-        font-size: 1.25rem;
+        font-size: 1rem;
       }
     }
 
@@ -127,25 +138,49 @@
     <img src="/images/photo1.jpeg" alt="Foto 1">
     <img src="/images/photo3.jpeg" alt="Foto 3">
   </div>
-  <div id="question" style="margin-top: 50px" class="hidden">
-    <p>Você vai conseguir comparecer ao chá de bebê?</p>
-    <button onclick="submitAnswer('Sim')">Sim</button>
+  <div id="question1" style="margin-top: 50px" class="">
+    <p>Você vai conseguir comparecer?</p>
+    <button onclick="checkQty()">Sim</button>
     <button onclick="submitAnswer('Não')">Não</button>
   </div>
-  <div id="message"></div>
+  <div id="question2" style="margin-top: 50px" class="hidden">
+    <p>Para finalizar, informe o número de acompanhantes (sem contar você)</p>
+    <input type="text" id="qty_adults" placeholder="Adultos">
+    <input type="text" id="qty_chidren" placeholder="Crianças">
+    <button onclick="submitAnswer('Sim')">Confirmar presença</button>
+  </div>
+  <div id="feedback" class="hidden">
+    <p id="message"></p>
+    <i>Para nos ajudar a organizar as compras, escolha seu presente através deste <a target="_blank" href="https://www.google.com/">link</a></i>
+  </div>
 
   <script>
     let currentPhone = window.location.search.replace('?phone=', '');
+
+    function checkQty() {
+      document.getElementById('question1').classList.add('hidden');
+      document.getElementById('question2').classList.remove('hidden');
+      document.getElementById('feedback').classList.add('hidden');
+      document.getElementById('qty_adults').focus();
+    }
 
     async function checkPhone() {
       const res = await fetch(`/api/check/${currentPhone}`);
       const data = await res.json();
       if (data.status === 'not_found') {
-        document.getElementById('message').innerText = 'Telefone não encontrado.';
+        document.getElementById('question1').classList.add('hidden');
+        document.getElementById('question2').classList.add('hidden');
+        document.getElementById('feedback').classList.remove('hidden');
+        document.getElementById('message').innerText = 'Não encontramos seu número na lista de convidados. Por favor, fale com os papais para confirmar sua presença 😀';
       } else if (data.status === 'already_answered') {
-        document.getElementById('message').innerText = 'Você já respondeu!';
+        document.getElementById('question1').classList.add('hidden');
+        document.getElementById('question2').classList.add('hidden');
+        document.getElementById('feedback').classList.remove('hidden');
+        document.getElementById('message').innerText = 'Já temos sua confirmação! Mal podemos esperar para celebrar a chegada da Alice com você! 🎉';
       } else {
-        document.getElementById('question').classList.remove('hidden');
+        document.getElementById('question1').classList.remove('hidden');
+        document.getElementById('question2').classList.add('hidden');
+        document.getElementById('feedback').classList.add('hidden');
       }
     }
 
@@ -153,10 +188,19 @@
       const res = await fetch('/api/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: currentPhone, answer })
+        body: JSON.stringify({
+          phone: currentPhone,
+          answer,
+          qty: {
+            adults: parseInt(document.getElementById('qty_adults').value) || 0,
+            children: parseInt(document.getElementById('qty_chidren').value) || 0
+          }
+        })
       });
       const data = await res.json();
-      document.getElementById('question').classList.add('hidden');
+      document.getElementById('question1').classList.add('hidden');
+      document.getElementById('question2').classList.add('hidden');
+      document.getElementById('feedback').classList.remove('hidden');
       document.getElementById('message').innerText = data.message;
     }
 
