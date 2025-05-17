@@ -121,6 +121,7 @@
       gap: 0.5rem;
       margin: 1rem 0;
       flex-wrap: wrap;
+      margin-bottom: 50px
     }
     .gallery img {
       width: 40%;
@@ -138,12 +139,12 @@
     <img src="/images/photo1.jpeg" alt="Foto 1">
     <img src="/images/photo3.jpeg" alt="Foto 3">
   </div>
-  <div id="question1" style="margin-top: 50px" class="hidden">
+  <div id="question1" class="hidden">
     <p>Você vai conseguir comparecer?</p>
     <button onclick="checkQty()">Sim</button>
     <button onclick="submitAnswer('Não')">Não</button>
   </div>
-  <div id="question2" style="margin-top: 50px" class="hidden">
+  <div id="question2" class="hidden">
     <p>Para finalizar, informe o número de acompanhantes (sem contar você)</p>
     <input type="text" id="qty_adults" placeholder="Adultos">
     <input type="text" id="qty_chidren" placeholder="Crianças">
