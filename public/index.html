@@ -171,12 +171,12 @@
         document.getElementById('question1').classList.add('hidden');
         document.getElementById('question2').classList.add('hidden');
         document.getElementById('feedback').classList.remove('hidden');
-        document.getElementById('message').innerText = 'Não encontramos seu número na lista de convidados. Por favor, fale com os papais para confirmar sua presença 😀';
+        document.getElementById('message').innerText = 'Parece que seu número não consta na lista de convidados 🤔🤔';
       } else if (data.status === 'already_answered') {
         document.getElementById('question1').classList.add('hidden');
         document.getElementById('question2').classList.add('hidden');
         document.getElementById('feedback').classList.remove('hidden');
-        document.getElementById('message').innerText = 'Já temos sua confirmação! Mal podemos esperar para celebrar a chegada da Alice com você! 🎉';
+        document.getElementById('message').innerText = 'Já temos sua confirmação! Mal podemos esperar para celebrar a chegada da Alice com você 🎉🎉';
       } else {
         document.getElementById('question1').classList.remove('hidden');
         document.getElementById('question2').classList.add('hidden');

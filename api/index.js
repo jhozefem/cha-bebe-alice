@@ -18,7 +18,7 @@ app.get('/api/check/:phone', async (req, res) => {
   if (!sheet) {
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
     await doc.loadInfo();
-    sheet = doc.sheetsByIndex[0];
+    sheet = doc.sheetsByIndex[1];
   }
 
   const phone = req.params.phone;
@@ -35,16 +35,20 @@ app.post('/api/respond', async (req, res) => {
   if (!sheet) {
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
     await doc.loadInfo();
-    sheet = doc.sheetsByIndex[0];
+    sheet = doc.sheetsByIndex[1];
   }
 
-  const { phone, answer } = req.body;
+  const { phone, answer, qty } = req.body;
   const rows = await sheet.getRows();
   const row = rows.find(r => r._rawData[0] === phone);
-  if (!row) return res.json({ message: 'Parece que seu número não consta na lista de convidados. Por favor, fale com os papais para atualizarmos isso. 😀' });
+  if (!row) return res.json({ message: 'Parece que seu número não consta na lista de convidados 🤔🤔' });
   row._rawData[1] = answer;
+  if(answer === 'Sim') {
+    row._rawData[2] = qty.adults;
+    row._rawData[3] = qty.children;
+  }
   await row.save();
-  return res.json({ message: 'Muito obrigado pela confirmação! Estamos muito felizes e mal podemos esperar para celebrar a chegada da Alice com você! 🎉' });
+  return res.json({ message: 'Obrigado pela confirmação! Mal podemos esperar para celebrar a chegada da Alice com você 🎉🎉' });
 });
 
 const PORT = process.env.PORT || 3000;
