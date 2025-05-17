@@ -18,16 +18,16 @@ app.get('/api/check/:phone', async (req, res) => {
   if (!sheet) {
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
     await doc.loadInfo();
-    sheet = doc.sheetsByIndex[1];
+    sheet = doc.sheetsByIndex[0];
   }
 
   const phone = req.params.phone;
   await sheet.loadCells();
   const rows = await sheet.getRows();
-  const row = rows.find(r => r._rawData[0] === phone);
+  const row = rows.find(r => r._rawData[2] === phone);
 
   if (!row) return res.json({ status: 'not_found' });
-  if (row._rawData[1]) return res.json({ status: 'already_answered' });
+  if (row._rawData[4]) return res.json({ status: 'already_answered' });
   return res.json({ status: 'ok' });
 });
 
@@ -35,20 +35,20 @@ app.post('/api/respond', async (req, res) => {
   if (!sheet) {
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID, serviceAccountAuth);
     await doc.loadInfo();
-    sheet = doc.sheetsByIndex[1];
+    sheet = doc.sheetsByIndex[0];
   }
 
   const { phone, answer, qty } = req.body;
   const rows = await sheet.getRows();
-  const row = rows.find(r => r._rawData[0] === phone);
+  const row = rows.find(r => r._rawData[2] === phone);
   let message = '';
 
   if (!row) return res.json({ message: 'Parece que seu número não consta na lista de convidados 🤔🤔' });
-  row._rawData[1] = answer;
+  row._rawData[4] = answer;
 
   if (answer === 'Sim') {
-    row._rawData[2] = qty.adults;
-    row._rawData[3] = qty.children;
+    row._rawData[5] = qty.adults;
+    row._rawData[6] = qty.children;
     message = 'Obrigado pela confirmação, mal podemos esperar para celebrar a chegada da Alice com você 🎉👶';
   } else if (answer === 'Não') {
     message = 'Sem problemas, esperamos nos encontrar em outra ocasião. Se ainda assim quiser presentear a Alice, as instruções estão abaixo.';
