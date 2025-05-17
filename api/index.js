@@ -23,8 +23,8 @@ app.get('/api/check/:phone', async (req, res) => {
 
   const phone = req.params.phone;
   await sheet.loadCells();
-  const rows = await sheet.getRows(); console.log(rows);
-  const row = rows.find(r => r.Telefone === phone);
+  const rows = await sheet.getRows();
+  const row = rows.find(r => r._rawData[0] === phone);
 
   if (!row) return res.json({ status: 'not_found' });
   if (row.Resposta) return res.json({ status: 'already_answered' });
