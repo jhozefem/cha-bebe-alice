@@ -23,7 +23,7 @@ app.get('/api/check/:phone', async (req, res) => {
 
   const phone = req.params.phone;
   await sheet.loadCells();
-  const rows = await sheet.getRows();
+  const rows = await sheet.getRows(); console.log(rows);
   const row = rows.find(r => r.Telefone === phone);
 
   if (!row) return res.json({ status: 'not_found' });
