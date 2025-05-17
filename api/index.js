@@ -22,7 +22,7 @@ let sheet;
 
 app.get('/api/check/:phone', async (req, res) => {
   const phone = req.params.phone;
-  //await sheet.loadCells();
+  await sheet.loadCells();
   const rows = await sheet.getRows();
   const row = rows.find(r => r.Telefone === phone);
 
